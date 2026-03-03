@@ -1,0 +1,21 @@
+package com.flightreservation.service;
+
+import com.flightreservation.dao.FlightDAO;
+import com.flightreservation.model.Flight;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class FlightServiceImpl implements FlightService {
+
+    @Autowired
+    private FlightDAO flightDAO;
+
+    @Override
+    public List<Flight> search(String source, String destination) {
+
+        return flightDAO.searchFlights(source, destination);
+    }
+}
