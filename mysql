@@ -1,5 +1,4 @@
 CREATE DATABASE flight_reservation;
-
 USE flight_reservation;
 
 CREATE TABLE flights (
@@ -7,17 +6,17 @@ CREATE TABLE flights (
     flight_number VARCHAR(20),
     source VARCHAR(50),
     destination VARCHAR(50),
+    departure_time VARCHAR(50),
     price DOUBLE
 );
 
 
 
-INSERT INTO flights (flight_number, source, destination, price)
+INSERT INTO flights (flight_number, source, destination, departure_time, price)
 VALUES
-('AI101', 'Kolkata', 'Delhi', 5000),
-('AI102', 'Kolkata', 'Mumbai', 6500),
-('AI103', 'Delhi', 'Mumbai', 4500),
-('AI104', 'Kolkata', 'Delhi', 5500);
+('AI101', 'Bangalore', 'Hyderabad', '09:45 AM', 5000),
+('AI202', 'Bangalore', 'Hyderabad', '02:00 PM', 5500),
+('AI303', 'Chennai', 'Delhi', '07:00 AM', 6500);
 
 
 
