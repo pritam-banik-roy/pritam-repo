@@ -1,4 +1,9 @@
+package com.flightreservation.dao;
+
+import com.flightreservation.model.User;
+import java.util.List;
+
 public interface UserDAO {
-    void saveUser(User user);
-    User login(String email, String password);
+    void save(User user);
+    User findByEmailAndPassword(String email, String password);
 }
