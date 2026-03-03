@@ -1,0 +1,9 @@
+package com.flightreservation.service;
+
+import com.flightreservation.model.Flight;
+import java.util.List;
+
+public interface FlightService {
+
+    List<Flight> search(String source, String destination);
+}
