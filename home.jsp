@@ -146,3 +146,66 @@ home.jsp
 
 </body>
 </html>
+
+
+=========================================================================================
+
+
+
+<c:if test="${not empty flights}">
+<hr>
+
+<h4>Available Flights</h4>
+
+<table class="table table-hover mt-3">
+
+<thead class="table-light">
+<tr>
+<th>Flight</th>
+<th>Route</th>
+<th>Schedule</th>
+<th>Price</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+<c:forEach items="${flights}" var="flight">
+
+<tr>
+
+<td>
+<b>${flight.flightNumber}</b>
+</td>
+
+<td>
+${flight.source} → ${flight.destination}
+</td>
+
+<td>
+Dep: ${flight.departureTime} <br>
+Arr: ${flight.arrivalTime}
+</td>
+
+<td>
+₹ ${flight.pricePerSeat}
+</td>
+
+<td>
+
+<a href="book/${flight.flightId}" class="btn btn-primary btn-sm">
+Book
+</a>
+
+</td>
+
+</tr>
+
+</c:forEach>
+
+</tbody>
+
+</table>
+
+</c:if>
