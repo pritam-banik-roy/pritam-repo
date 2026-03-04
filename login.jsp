@@ -184,12 +184,14 @@ Don't have an account?
 
 <h3 class="text-center mb-4">Login</h3>
 
+<!-- Signup Success Message -->
 <c:if test="${not empty successMessage}">
 <div class="alert alert-success">
 ${successMessage}
 </div>
 </c:if>
 
+<!-- Login Error Message -->
 <c:if test="${not empty error}">
 <div class="alert alert-danger">
 ${error}
@@ -198,23 +200,31 @@ ${error}
 
 <form:form method="post" action="login" modelAttribute="user">
 
+<!-- EMAIL -->
 <div class="mb-3">
 
 <label>Email</label>
 
-<form:input path="email" cssClass="form-control" placeholder="Enter your email"/>
+<form:input path="email"
+cssClass="form-control"
+placeholder="Enter your email"/>
 
-<form:errors path="email" cssClass="text-danger"/>
+<form:errors path="email"
+cssClass="text-danger"/>
 
 </div>
 
+<!-- PASSWORD -->
 <div class="mb-3">
 
 <label>Password</label>
 
-<form:password path="password" cssClass="form-control" placeholder="Enter password"/>
+<form:password path="password"
+cssClass="form-control"
+placeholder="Enter password"/>
 
-<form:errors path="password" cssClass="text-danger"/>
+<form:errors path="password"
+cssClass="text-danger"/>
 
 </div>
 
@@ -241,6 +251,21 @@ Don't have an account?
 </div>
 
 </div>
+
+<!-- Optional: Auto-hide alerts -->
+<script>
+
+setTimeout(function(){
+
+let alert=document.querySelector(".alert");
+
+if(alert){
+alert.style.display="none";
+}
+
+},3000);
+
+</script>
 
 </body>
 
