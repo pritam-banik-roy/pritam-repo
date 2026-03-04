@@ -187,7 +187,6 @@ Already have an account?
 </html>
 =============================================================================================================================
 
-
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -213,7 +212,6 @@ Already have an account?
 
 <h3 class="text-center mb-4">Sign Up</h3>
 
-<!-- Duplicate email error -->
 <c:if test="${not empty emailError}">
 <div class="alert alert-danger">
 ${emailError}
@@ -222,7 +220,6 @@ ${emailError}
 
 <form:form method="post" action="signup" modelAttribute="user">
 
-<!-- EMAIL -->
 <div class="mb-3">
 
 <label>Email</label>
@@ -233,7 +230,6 @@ ${emailError}
 
 </div>
 
-<!-- PASSWORD -->
 <div class="mb-3">
 
 <label>Password</label>
@@ -242,13 +238,14 @@ ${emailError}
 
 <form:errors path="password" cssClass="text-danger"/>
 
-<small class="text-muted">
-Password must be 6+ characters with uppercase, lowercase, number and special character
-</small>
+<c:if test="${not empty passwordError}">
+<div class="text-danger">
+${passwordError}
+</div>
+</c:if>
 
 </div>
 
-<!-- ROLE -->
 <div class="mb-3">
 
 <label>Role</label>
@@ -256,9 +253,7 @@ Password must be 6+ characters with uppercase, lowercase, number and special cha
 <form:select path="role" cssClass="form-control">
 
 <form:option value="">-- Select Role --</form:option>
-
 <form:option value="USER">User</form:option>
-
 <form:option value="ADMIN">Admin</form:option>
 
 </form:select>
