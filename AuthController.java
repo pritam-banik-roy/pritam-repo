@@ -223,15 +223,10 @@ public class AuthController {
     // ================= LOGIN =================
     @PostMapping("/login")
     public String login(
-            @Valid @ModelAttribute("user") User user,
-            BindingResult result,
+            @ModelAttribute("user") User user,
             HttpSession session,
             Model model,
             RedirectAttributes redirectAttributes) {
-
-        if (result.hasErrors()) {
-            return "login";
-        }
 
         User dbUser =
                 userService.login(user.getEmail(), user.getPassword());
@@ -246,6 +241,7 @@ public class AuthController {
             return "login";
         }
 
+        // LOGIN SUCCESS
         session.setAttribute("loggedUser", dbUser);
 
         redirectAttributes.addFlashAttribute(
@@ -254,5 +250,14 @@ public class AuthController {
         );
 
         return "redirect:/";
+    }
+
+    // ================= LOGOUT =================
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+
+        session.invalidate();
+
+        return "redirect:/login";
     }
 }
