@@ -15,7 +15,9 @@ public class FlightDAOImpl implements FlightDAO {
 
     @Override
     public List<Flight> findFlights(String source, String destination) {
-        String sql = "SELECT * FROM flights WHERE source=? AND destination=?";
+        //String sql = "SELECT * FROM flights WHERE source=? AND destination=?";
+
+        String sql = "SELECT * FROM flight WHERE LOWER(source)=LOWER(?) AND LOWER(destination)=LOWER(?)";
         return jdbcTemplate.query(sql,
                 new BeanPropertyRowMapper<>(Flight.class),
                 source, destination);
