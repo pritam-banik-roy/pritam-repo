@@ -2,6 +2,7 @@ package com.flightreservation.service;
 
 import com.flightreservation.dao.UserDAO;
 import com.flightreservation.model.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(String email, String password) {
-        return userDAO.findByEmailAndPassword(email, password);
+    public User login(String email,String password) {
+        return userDAO.findByEmailAndPassword(email,password);
+    }
+
+    @Override
+    public boolean emailExists(String email) {
+        return userDAO.findByEmail(email) != null;
     }
 }
