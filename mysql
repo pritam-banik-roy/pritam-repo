@@ -1,22 +1,26 @@
 CREATE DATABASE flight_reservation;
 USE flight_reservation;
 
-CREATE TABLE flights (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    flight_number VARCHAR(20),
+CREATE TABLE flight (
+    flight_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    flight_number VARCHAR(50),
     source VARCHAR(50),
     destination VARCHAR(50),
     departure_time VARCHAR(50),
-    price DOUBLE
+    arrival_time VARCHAR(50),
+    capacity INT,
+    price_per_seat DOUBLE
 );
 
 
-
-INSERT INTO flights (flight_number, source, destination, departure_time, price)
+INSERT INTO flight
+(flight_number, source, destination, departure_time, arrival_time, capacity, price_per_seat)
 VALUES
-('AI101', 'Bangalore', 'Hyderabad', '09:45 AM', 5000),
-('AI202', 'Bangalore', 'Hyderabad', '02:00 PM', 5500),
-('AI303', 'Chennai', 'Delhi', '07:00 AM', 6500);
+('AI101','Bangalore','Hyderabad','10:00','11:30',120,4500),
+
+('AI202','Bangalore','Delhi','12:00','15:00',150,6500),
+
+('AI303','Mumbai','Hyderabad','09:00','10:45',110,5000);
 
 
 
@@ -32,31 +36,3 @@ db.password=yourpassword
 
 
 
-RENAME TABLE flights TO flight;
-
-
-ALTER TABLE flight
-ADD departure_time VARCHAR(50);
-
-ALTER TABLE flight
-ADD arrival_time VARCHAR(50);
-
-ALTER TABLE flight
-ADD capacity INT;
-
-ALTER TABLE flight
-ADD price_per_seat DOUBLE;
-
-ALTER TABLE flight
-ADD PRIMARY KEY (flight_id);
-
-
-DESCRIBE flight;
-
-
-INSERT INTO flight 
-(flight_id, flight_number, source, destination, departure_time, arrival_time, capacity, price_per_seat)
-VALUES
-(1,'AI101','Bangalore','Hyderabad','10:00','11:30',120,4500),
-(2,'AI202','Bangalore','Delhi','12:00','15:00',150,6500),
-(3,'AI303','Mumbai','Hyderabad','09:00','10:45',110,5000);
