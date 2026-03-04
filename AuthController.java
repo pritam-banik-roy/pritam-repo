@@ -59,18 +59,101 @@
 =================================================================================================================================
 
 
+// package com.flightreservation.controller;
 
-    package com.flightreservation.controller;
+// import com.flightreservation.model.User;
+// import com.flightreservation.service.UserService;
+
+// import javax.servlet.http.HttpSession;
+
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.stereotype.Controller;
+// import org.springframework.ui.Model;
+// import org.springframework.web.bind.annotation.*;
+
+// @Controller
+// public class AuthController {
+
+//     @Autowired
+//     private UserService userService;
+
+//     // SIGNUP PAGE
+//     @GetMapping("/signup")
+//     public String signupForm(Model model) {
+
+//         model.addAttribute("user",new User());
+
+//         return "signup";
+//     }
+
+//     // REGISTER USER
+//     @PostMapping("/signup")
+//     public String register(@ModelAttribute User user){
+
+//         userService.register(user);
+
+//         return "redirect:/login";
+//     }
+
+//     // LOGIN PAGE
+//     @GetMapping("/login")
+//     public String loginForm(Model model){
+
+//         model.addAttribute("user",new User());
+
+//         return "login";
+//     }
+
+//     // LOGIN PROCESS
+//     @PostMapping("/login")
+//     public String login(@ModelAttribute User user,
+//                         HttpSession session,
+//                         Model model){
+
+//         try{
+
+//             User dbUser =
+//                     userService.login(user.getEmail(),user.getPassword());
+
+//             session.setAttribute("loggedUser",dbUser);
+
+//             return "redirect:/";
+
+//         }
+//         catch(Exception e){
+
+//             model.addAttribute("error","Invalid Email or Password");
+
+//             return "login";
+//         }
+//     }
+
+//     // LOGOUT
+//     @GetMapping("/logout")
+//     public String logout(HttpSession session){
+
+//         session.invalidate();
+
+//         return "redirect:/";
+//     }
+// }
+
+==============================================================================================================================
+
+package com.flightreservation.controller;
 
 import com.flightreservation.model.User;
 import com.flightreservation.service.UserService;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AuthController {
@@ -78,62 +161,73 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    // SIGNUP PAGE
     @GetMapping("/signup")
     public String signupForm(Model model) {
 
-        model.addAttribute("user",new User());
-
+        model.addAttribute("user", new User());
         return "signup";
     }
 
-    // REGISTER USER
     @PostMapping("/signup")
-    public String register(@ModelAttribute User user){
+    public String register(
+            @Valid @ModelAttribute("user") User user,
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            return "signup";
+        }
+
+        if (userService.emailExists(user.getEmail())) {
+            model.addAttribute("emailError", "Email already exists");
+            return "signup";
+        }
 
         userService.register(user);
+
+        // SUCCESS MESSAGE
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Registration successful! Please login."
+        );
 
         return "redirect:/login";
     }
 
-    // LOGIN PAGE
     @GetMapping("/login")
-    public String loginForm(Model model){
+    public String loginForm(Model model) {
 
-        model.addAttribute("user",new User());
-
+        model.addAttribute("user", new User());
         return "login";
     }
 
-    // LOGIN PROCESS
     @PostMapping("/login")
-    public String login(@ModelAttribute User user,
-                        HttpSession session,
-                        Model model){
+    public String login(
+            @ModelAttribute User user,
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
-        try{
+        User dbUser =
+                userService.login(user.getEmail(), user.getPassword());
 
-            User dbUser =
-                    userService.login(user.getEmail(),user.getPassword());
+        if (dbUser == null) {
 
-            session.setAttribute("loggedUser",dbUser);
-
-            return "redirect:/";
-
-        }
-        catch(Exception e){
-
-            model.addAttribute("error","Invalid Email or Password");
+            model.addAttribute(
+                    "error",
+                    "Invalid email or password"
+            );
 
             return "login";
         }
-    }
 
-    // LOGOUT
-    @GetMapping("/logout")
-    public String logout(HttpSession session){
+        session.setAttribute("loggedUser", dbUser);
 
-        session.invalidate();
+        redirectAttributes.addFlashAttribute(
+                "loginSuccess",
+                "Login successful!"
+        );
 
         return "redirect:/";
     }
