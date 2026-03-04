@@ -221,27 +221,33 @@ public class AuthController {
     }
 
     // ================= LOGIN =================
-   @PostMapping("/login")
+@PostMapping("/login")
 public String login(
         @ModelAttribute("user") User user,
         HttpSession session,
         Model model,
         RedirectAttributes redirectAttributes) {
 
-    // STEP 1: Check empty fields
+    boolean hasError = false;
+
+    // EMAIL VALIDATION
     if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
         model.addAttribute("emailError", "Email is required");
-        return "login";
+        hasError = true;
     }
 
+    // PASSWORD VALIDATION
     if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
         model.addAttribute("passwordError", "Password is required");
+        hasError = true;
+    }
+
+    if (hasError) {
         return "login";
     }
 
-    // STEP 2: Check DB
-    User dbUser =
-            userService.login(user.getEmail(), user.getPassword());
+    // CHECK DATABASE
+    User dbUser = userService.login(user.getEmail(), user.getPassword());
 
     if (dbUser == null) {
 
@@ -253,7 +259,7 @@ public String login(
         return "login";
     }
 
-    // STEP 3: Login success
+    // LOGIN SUCCESS
     session.setAttribute("loggedUser", dbUser);
 
     redirectAttributes.addFlashAttribute(
