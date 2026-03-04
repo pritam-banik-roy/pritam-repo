@@ -157,7 +157,6 @@ Don't have an account?
 </html>
 ==================================================================================================================
 
-
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -191,7 +190,7 @@ ${successMessage}
 </div>
 </c:if>
 
-<!-- Login Error Message -->
+<!-- Invalid Login Error -->
 <c:if test="${not empty error}">
 <div class="alert alert-danger">
 ${error}
@@ -200,7 +199,7 @@ ${error}
 
 <form:form method="post" action="login" modelAttribute="user">
 
-<!-- EMAIL -->
+<!-- EMAIL FIELD -->
 <div class="mb-3">
 
 <label>Email</label>
@@ -209,12 +208,17 @@ ${error}
 cssClass="form-control"
 placeholder="Enter your email"/>
 
-<form:errors path="email"
-cssClass="text-danger"/>
+<form:errors path="email" cssClass="text-danger"/>
+
+<c:if test="${not empty emailError}">
+<div class="text-danger">
+${emailError}
+</div>
+</c:if>
 
 </div>
 
-<!-- PASSWORD -->
+<!-- PASSWORD FIELD -->
 <div class="mb-3">
 
 <label>Password</label>
@@ -223,8 +227,13 @@ cssClass="text-danger"/>
 cssClass="form-control"
 placeholder="Enter password"/>
 
-<form:errors path="password"
-cssClass="text-danger"/>
+<form:errors path="password" cssClass="text-danger"/>
+
+<c:if test="${not empty passwordError}">
+<div class="text-danger">
+${passwordError}
+</div>
+</c:if>
 
 </div>
 
@@ -252,7 +261,7 @@ Don't have an account?
 
 </div>
 
-<!-- Optional: Auto-hide alerts -->
+<!-- Auto-hide alerts -->
 <script>
 
 setTimeout(function(){
