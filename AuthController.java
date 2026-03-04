@@ -221,43 +221,45 @@ public class AuthController {
     }
 
     // ================= LOGIN =================
-    @PostMapping("/login")
-    public String login(
-            @ModelAttribute("user") User user,
-            HttpSession session,
-            Model model,
-            RedirectAttributes redirectAttributes) {
+   @PostMapping("/login")
+public String login(
+        @ModelAttribute("user") User user,
+        HttpSession session,
+        Model model,
+        RedirectAttributes redirectAttributes) {
 
-        User dbUser =
-                userService.login(user.getEmail(), user.getPassword());
+    // STEP 1: Check empty fields
+    if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+        model.addAttribute("emailError", "Email is required");
+        return "login";
+    }
 
-        if (dbUser == null) {
+    if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+        model.addAttribute("passwordError", "Password is required");
+        return "login";
+    }
 
-            model.addAttribute(
-                    "error",
-                    "Invalid email or password"
-            );
+    // STEP 2: Check DB
+    User dbUser =
+            userService.login(user.getEmail(), user.getPassword());
 
-            return "login";
-        }
+    if (dbUser == null) {
 
-        // LOGIN SUCCESS
-        session.setAttribute("loggedUser", dbUser);
-
-        redirectAttributes.addFlashAttribute(
-                "loginSuccess",
-                "Login successful!"
+        model.addAttribute(
+                "error",
+                "Invalid email or password"
         );
 
-        return "redirect:/";
+        return "login";
     }
 
-    // ================= LOGOUT =================
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    // STEP 3: Login success
+    session.setAttribute("loggedUser", dbUser);
 
-        session.invalidate();
+    redirectAttributes.addFlashAttribute(
+            "loginSuccess",
+            "Login successful!"
+    );
 
-        return "redirect:/login";
-    }
+    return "redirect:/";
 }
