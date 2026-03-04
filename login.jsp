@@ -158,8 +158,6 @@ Don't have an account?
 ==================================================================================================================
 
 
-
-
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -186,14 +184,12 @@ Don't have an account?
 
 <h3 class="text-center mb-4">Login</h3>
 
-<!-- Signup success -->
 <c:if test="${not empty successMessage}">
 <div class="alert alert-success">
 ${successMessage}
 </div>
 </c:if>
 
-<!-- Login error -->
 <c:if test="${not empty error}">
 <div class="alert alert-danger">
 ${error}
@@ -202,7 +198,6 @@ ${error}
 
 <form:form method="post" action="login" modelAttribute="user">
 
-<!-- EMAIL -->
 <div class="mb-3">
 
 <label>Email</label>
@@ -213,7 +208,6 @@ ${error}
 
 </div>
 
-<!-- PASSWORD -->
 <div class="mb-3">
 
 <label>Password</label>
