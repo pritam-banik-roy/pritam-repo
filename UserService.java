@@ -6,5 +6,7 @@ public interface UserService {
 
     void register(User user);
 
-    User login(String email, String password);
+    User login(String email,String password);
+
+    boolean emailExists(String email);
 }
