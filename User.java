@@ -96,15 +96,22 @@ public class User {
     @Email(message = "Enter valid email format")
     private String email;
 
-    @NotEmpty(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    // @NotEmpty(message = "Password is required")
+    // @Size(min = 6, message = "Password must be at least 6 characters")
+    // @Pattern(
+    //     regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).+$",
+    //     message = "Password must contain uppercase, lowercase, number and special symbol"
+    // )
+    // private String password;
+
+    @NotBlank(message = "Password is required")
     @Pattern(
-        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).+$",
-        message = "Password must contain uppercase, lowercase, number and special symbol"
+    regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{6,}$",
+    message = "Password must be 6+ characters with uppercase, lowercase, number and special character"
     )
     private String password;
 
-    @NotEmpty(message = "Role must be selected")
+    @NotEmpty(message = "Please select a role!")
     private String role;
 
     public Long getUserId() { return userId; }
