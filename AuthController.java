@@ -160,9 +160,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    // ======================
-    // SIGNUP PAGE
-    // ======================
+    // ================= SIGNUP PAGE =================
     @GetMapping("/signup")
     public String signupForm(Model model) {
 
@@ -170,9 +168,7 @@ public class AuthController {
         return "signup";
     }
 
-    // ======================
-    // REGISTER USER
-    // ======================
+    // ================= REGISTER =================
     @PostMapping("/signup")
     public String register(
             @Valid @ModelAttribute("user") User user,
@@ -184,8 +180,24 @@ public class AuthController {
             return "signup";
         }
 
+        // PASSWORD FORMAT CHECK
+        String password = user.getPassword();
+
+        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{6,}$")) {
+
+            model.addAttribute(
+                    "passwordError",
+                    "Password must be 6+ characters with uppercase, lowercase, number and special character"
+            );
+
+            return "signup";
+        }
+
+        // DUPLICATE EMAIL CHECK
         if (userService.emailExists(user.getEmail())) {
+
             model.addAttribute("emailError", "Email already exists");
+
             return "signup";
         }
 
@@ -199,19 +211,16 @@ public class AuthController {
         return "redirect:/login";
     }
 
-    // ======================
-    // LOGIN PAGE
-    // ======================
+    // ================= LOGIN PAGE =================
     @GetMapping("/login")
     public String loginForm(Model model) {
 
         model.addAttribute("user", new User());
+
         return "login";
     }
 
-    // ======================
-    // LOGIN USER
-    // ======================
+    // ================= LOGIN =================
     @PostMapping("/login")
     public String login(
             @Valid @ModelAttribute("user") User user,
@@ -220,13 +229,12 @@ public class AuthController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        // STEP 1 — FIELD VALIDATION
         if (result.hasErrors()) {
             return "login";
         }
 
-        // STEP 2 — CHECK DATABASE
-        User dbUser = userService.login(user.getEmail(), user.getPassword());
+        User dbUser =
+                userService.login(user.getEmail(), user.getPassword());
 
         if (dbUser == null) {
 
@@ -238,7 +246,6 @@ public class AuthController {
             return "login";
         }
 
-        // STEP 3 — SUCCESS LOGIN
         session.setAttribute("loggedUser", dbUser);
 
         redirectAttributes.addFlashAttribute(
