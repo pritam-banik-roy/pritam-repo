@@ -7,22 +7,21 @@ import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Repository
-public class UserDAOImpl implements UserDAO {
+public class FlightDAOImpl implements FlightDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public void save(User user) {
-        String sql = "INSERT INTO users(email, password, role) VALUES(?,?,?)";
-        jdbcTemplate.update(sql, user.getEmail(), user.getPassword(), user.getRole());
-    }
+    public List<Flight> findFlights(String source, String destination) {
 
-    @Override
-    public User findByEmailAndPassword(String email, String password) {
-        String sql = "SELECT * FROM users WHERE email=? AND password=?";
-        return jdbcTemplate.queryForObject(sql,
-                new BeanPropertyRowMapper<>(User.class),
-                email, password);
+        String sql = "SELECT * FROM flight WHERE LOWER(source)=LOWER(?) AND LOWER(destination)=LOWER(?)";
+
+        return jdbcTemplate.query(
+                sql,
+                new BeanPropertyRowMapper<>(Flight.class),
+                source,
+                destination
+        );
     }
 }
