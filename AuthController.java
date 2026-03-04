@@ -139,7 +139,6 @@
 // }
 
 ==============================================================================================================================
-
 package com.flightreservation.controller;
 
 import com.flightreservation.model.User;
@@ -161,6 +160,9 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    // ======================
+    // SIGNUP PAGE
+    // ======================
     @GetMapping("/signup")
     public String signupForm(Model model) {
 
@@ -168,6 +170,9 @@ public class AuthController {
         return "signup";
     }
 
+    // ======================
+    // REGISTER USER
+    // ======================
     @PostMapping("/signup")
     public String register(
             @Valid @ModelAttribute("user") User user,
@@ -186,7 +191,6 @@ public class AuthController {
 
         userService.register(user);
 
-        // SUCCESS MESSAGE
         redirectAttributes.addFlashAttribute(
                 "successMessage",
                 "Registration successful! Please login."
@@ -195,6 +199,9 @@ public class AuthController {
         return "redirect:/login";
     }
 
+    // ======================
+    // LOGIN PAGE
+    // ======================
     @GetMapping("/login")
     public String loginForm(Model model) {
 
@@ -202,15 +209,24 @@ public class AuthController {
         return "login";
     }
 
+    // ======================
+    // LOGIN USER
+    // ======================
     @PostMapping("/login")
     public String login(
-            @ModelAttribute User user,
+            @Valid @ModelAttribute("user") User user,
+            BindingResult result,
             HttpSession session,
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        User dbUser =
-                userService.login(user.getEmail(), user.getPassword());
+        // STEP 1 — FIELD VALIDATION
+        if (result.hasErrors()) {
+            return "login";
+        }
+
+        // STEP 2 — CHECK DATABASE
+        User dbUser = userService.login(user.getEmail(), user.getPassword());
 
         if (dbUser == null) {
 
@@ -222,6 +238,7 @@ public class AuthController {
             return "login";
         }
 
+        // STEP 3 — SUCCESS LOGIN
         session.setAttribute("loggedUser", dbUser);
 
         redirectAttributes.addFlashAttribute(
