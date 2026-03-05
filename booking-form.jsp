@@ -29,10 +29,14 @@ Book Flight
 </h4>
 
 <div class="alert alert-info">
-
 <b>Flight Number:</b> ${flight.flightNumber}
-
 </div>
+
+<c:if test="${not empty seatError}">
+<div class="alert alert-danger">
+${seatError}
+</div>
+</c:if>
 
 <form action="/check-seat" method="post">
 
