@@ -179,3 +179,187 @@ Book
 </body>
 </html>
 
+=======================================================================================================================
+
+
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Flight Reservation System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+<h2 class="text-center mb-4">
+
+Flight Reservation System
+
+</h2>
+
+<div class="card p-4 shadow">
+
+<h4>Search Flights</h4>
+
+<form:form method="post" action="search" modelAttribute="searchFlight">
+
+<div class="mb-3">
+
+<label>Source</label>
+
+<form:input path="source" cssClass="form-control"/>
+
+<form:errors path="source" cssClass="text-danger"/>
+
+</div>
+
+<div class="mb-3">
+
+<label>Destination</label>
+
+<form:input path="destination" cssClass="form-control"/>
+
+<form:errors path="destination" cssClass="text-danger"/>
+
+</div>
+
+<button type="submit" class="btn btn-primary">
+
+Search Flights
+
+</button>
+
+</form:form>
+
+
+<!-- NO FLIGHTS MESSAGE -->
+
+<c:if test="${not empty noFlightsMessage}">
+
+<div class="alert alert-warning text-center mt-4">
+
+<h5>⚠ No Flights Found</h5>
+
+<p>${noFlightsMessage}</p>
+
+<p class="text-muted">
+
+Try another source or destination.
+
+</p>
+
+</div>
+
+</c:if>
+
+
+<!-- FLIGHT TABLE -->
+
+<c:if test="${not empty flights}">
+
+<hr>
+
+<h4>Available Flights</h4>
+
+<table class="table table-hover mt-3">
+
+<thead class="table-light">
+
+<tr>
+
+<th>Flight</th>
+<th>Route</th>
+<th>Schedule</th>
+<th>Price</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<c:forEach items="${flights}" var="flight">
+
+<tr>
+
+<td>
+
+<b>${flight.flightNumber}</b>
+
+</td>
+
+<td>
+
+${flight.source} → ${flight.destination}
+
+</td>
+
+<td>
+
+Dep: ${flight.departureTime} <br>
+
+Arr: ${flight.arrivalTime}
+
+</td>
+
+<td>
+
+₹ ${flight.pricePerSeat}
+
+</td>
+
+<td>
+
+<a href="book/${flight.flightId}" class="btn btn-primary btn-sm">
+
+Book
+
+</a>
+
+</td>
+
+</tr>
+
+</c:forEach>
+
+</tbody>
+
+</table>
+
+</c:if>
+
+
+<hr>
+
+<div class="mt-3">
+
+<a href="login" class="btn btn-outline-success">
+
+Login
+
+</a>
+
+<a href="signup" class="btn btn-outline-primary">
+
+Sign Up
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
