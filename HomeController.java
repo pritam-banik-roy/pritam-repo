@@ -61,7 +61,69 @@
     ============================================================================================================
 
 
-    package com.flightreservation.controller;
+//     package com.flightreservation.controller;
+
+// import com.flightreservation.model.SearchFlight;
+// import com.flightreservation.model.Flight;
+// import com.flightreservation.service.FlightService;
+
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.stereotype.Controller;
+// import org.springframework.ui.Model;
+// import org.springframework.validation.BindingResult;
+// import org.springframework.web.bind.annotation.*;
+
+// import javax.validation.Valid;
+// import java.util.List;
+
+// @Controller
+// @RequestMapping("/")
+// public class HomeController {
+
+//     @Autowired
+//     private FlightService flightService;
+
+//     // =========================
+//     // HOME PAGE
+//     // =========================
+//     @GetMapping
+//     public String showHome(Model model) {
+
+//         model.addAttribute("searchFlight", new SearchFlight());
+
+//         return "home";
+//     }
+
+//     // =========================
+//     // SEARCH FLIGHTS
+//     // =========================
+//     @PostMapping("/search")
+//     public String searchFlights(
+//             @Valid @ModelAttribute("searchFlight") SearchFlight searchFlight,
+//             BindingResult result,
+//             Model model) {
+
+//         if (result.hasErrors()) {
+//             return "home";
+//         }
+
+//         // Fetch flights from service
+//         List<Flight> flights =
+//                 flightService.search(searchFlight.getSource(),
+//                                      searchFlight.getDestination());
+
+//         // Send flights to JSP
+//         model.addAttribute("flights", flights);
+
+//         return "home";   // stay on same page
+//     }
+// }
+====================================================================================================================
+
+
+
+
+package com.flightreservation.controller;
 
 import com.flightreservation.model.SearchFlight;
 import com.flightreservation.model.Flight;
@@ -83,9 +145,7 @@ public class HomeController {
     @Autowired
     private FlightService flightService;
 
-    // =========================
-    // HOME PAGE
-    // =========================
+    // ================= HOME PAGE =================
     @GetMapping
     public String showHome(Model model) {
 
@@ -94,9 +154,7 @@ public class HomeController {
         return "home";
     }
 
-    // =========================
-    // SEARCH FLIGHTS
-    // =========================
+    // ================= SEARCH FLIGHTS =================
     @PostMapping("/search")
     public String searchFlights(
             @Valid @ModelAttribute("searchFlight") SearchFlight searchFlight,
@@ -104,17 +162,27 @@ public class HomeController {
             Model model) {
 
         if (result.hasErrors()) {
+
             return "home";
         }
 
-        // Fetch flights from service
         List<Flight> flights =
-                flightService.search(searchFlight.getSource(),
-                                     searchFlight.getDestination());
+                flightService.findFlights(
+                        searchFlight.getSource(),
+                        searchFlight.getDestination()
+                );
 
-        // Send flights to JSP
         model.addAttribute("flights", flights);
 
-        return "home";   // stay on same page
+        // MESSAGE WHEN NO FLIGHTS FOUND
+        if (flights.isEmpty()) {
+
+            model.addAttribute(
+                    "noFlightsMessage",
+                    "No flights available for this route"
+            );
+        }
+
+        return "home";
     }
 }
