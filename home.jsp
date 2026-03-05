@@ -108,50 +108,6 @@ home.jsp
         </form:form>
 
         <!-- SHOW SEARCH RESULT BELOW -->
-        <c:if test="${not empty flights}">
-            <hr>
-            <h5>Available Flights</h5>
-
-            <table class="table table-bordered mt-3">
-                <thead class="table-dark">
-                <tr>
-                    <th>Flight No</th>
-                    <th>Source</th>
-                    <th>Destination</th>
-                    <th>Price</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${flights}" var="flight">
-                    <tr>
-                        <td>${flight.flightNumber}</td>
-                        <td>${flight.source}</td>
-                        <td>${flight.destination}</td>
-                        <td>₹ ${flight.price}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </c:if>
-
-        <hr>
-
-        <div class="mt-3">
-            <a href="login" class="btn btn-outline-success">Login</a>
-            <a href="signup" class="btn btn-outline-primary">Sign Up</a>
-        </div>
-
-    </div>
-</div>
-
-</body>
-</html>
-
-
-=========================================================================================
-
-
-
 <c:if test="${not empty flights}">
 <hr>
 
@@ -209,3 +165,17 @@ Book
 </table>
 
 </c:if>
+
+        <hr>
+
+        <div class="mt-3">
+            <a href="login" class="btn btn-outline-success">Login</a>
+            <a href="signup" class="btn btn-outline-primary">Sign Up</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
+
