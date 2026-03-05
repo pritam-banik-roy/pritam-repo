@@ -139,6 +139,140 @@
 // }
 
 ==============================================================================================================================
+// package com.flightreservation.controller;
+
+// import com.flightreservation.model.User;
+// import com.flightreservation.service.UserService;
+
+// import javax.servlet.http.HttpSession;
+// import javax.validation.Valid;
+
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.stereotype.Controller;
+// import org.springframework.ui.Model;
+// import org.springframework.validation.BindingResult;
+// import org.springframework.web.bind.annotation.*;
+// import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+// @Controller
+// public class AuthController {
+
+//     @Autowired
+//     private UserService userService;
+
+//     // ================= SIGNUP PAGE =================
+//     @GetMapping("/signup")
+//     public String signupForm(Model model) {
+
+//         model.addAttribute("user", new User());
+//         return "signup";
+//     }
+
+//     // ================= REGISTER =================
+//     @PostMapping("/signup")
+//     public String register(
+//             @Valid @ModelAttribute("user") User user,
+//             BindingResult result,
+//             Model model,
+//             RedirectAttributes redirectAttributes) {
+
+//         if (result.hasErrors()) {
+//             return "signup";
+//         }
+
+//         // PASSWORD FORMAT CHECK
+//         String password = user.getPassword();
+
+//         if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{6,}$")) {
+
+//             model.addAttribute(
+//                     "passwordError",
+//                     "Password must be 6+ characters with uppercase, lowercase, number and special character"
+//             );
+
+//             return "signup";
+//         }
+
+//         // DUPLICATE EMAIL CHECK
+//         if (userService.emailExists(user.getEmail())) {
+
+//             model.addAttribute("emailError", "Email already exists");
+
+//             return "signup";
+//         }
+
+//         userService.register(user);
+
+//         redirectAttributes.addFlashAttribute(
+//                 "successMessage",
+//                 "Registration successful! Please login."
+//         );
+
+//         return "redirect:/login";
+//     }
+
+//     // ================= LOGIN PAGE =================
+//     @GetMapping("/login")
+//     public String loginForm(Model model) {
+
+//         model.addAttribute("user", new User());
+
+//         return "login";
+//     }
+
+//     // ================= LOGIN =================
+// @PostMapping("/login")
+// public String login(
+//         @ModelAttribute("user") User user,
+//         HttpSession session,
+//         Model model,
+//         RedirectAttributes redirectAttributes) {
+
+//     boolean hasError = false;
+
+//     // EMAIL VALIDATION
+//     if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+//         model.addAttribute("emailError", "Email is required");
+//         hasError = true;
+//     }
+
+//     // PASSWORD VALIDATION
+//     if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+//         model.addAttribute("passwordError", "Password is required");
+//         hasError = true;
+//     }
+
+//     if (hasError) {
+//         return "login";
+//     }
+
+//     // CHECK DATABASE
+//     User dbUser = userService.login(user.getEmail(), user.getPassword());
+
+//     if (dbUser == null) {
+
+//         model.addAttribute(
+//                 "error",
+//                 "Invalid email or password"
+//         );
+
+//         return "login";
+//     }
+
+//     // LOGIN SUCCESS
+//     session.setAttribute("loggedUser", dbUser);
+
+//     redirectAttributes.addFlashAttribute(
+//             "loginSuccess",
+//             "Login successful!"
+//     );
+
+//     return "redirect:/";
+// }
+===========================================================================================================================
+
+
+
 package com.flightreservation.controller;
 
 import com.flightreservation.model.User;
@@ -221,51 +355,64 @@ public class AuthController {
     }
 
     // ================= LOGIN =================
-@PostMapping("/login")
-public String login(
-        @ModelAttribute("user") User user,
-        HttpSession session,
-        Model model,
-        RedirectAttributes redirectAttributes) {
+    @PostMapping("/login")
+    public String login(
+            @ModelAttribute("user") User user,
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
-    boolean hasError = false;
+        boolean hasError = false;
 
-    // EMAIL VALIDATION
-    if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
-        model.addAttribute("emailError", "Email is required");
-        hasError = true;
-    }
+        // EMAIL VALIDATION
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            model.addAttribute("emailError", "Email is required");
+            hasError = true;
+        }
 
-    // PASSWORD VALIDATION
-    if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
-        model.addAttribute("passwordError", "Password is required");
-        hasError = true;
-    }
+        // PASSWORD VALIDATION
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            model.addAttribute("passwordError", "Password is required");
+            hasError = true;
+        }
 
-    if (hasError) {
-        return "login";
-    }
+        if (hasError) {
+            return "login";
+        }
 
-    // CHECK DATABASE
-    User dbUser = userService.login(user.getEmail(), user.getPassword());
+        // CHECK DATABASE
+        User dbUser = userService.login(user.getEmail(), user.getPassword());
 
-    if (dbUser == null) {
+        if (dbUser == null) {
 
-        model.addAttribute(
-                "error",
-                "Invalid email or password"
+            model.addAttribute(
+                    "error",
+                    "Invalid email or password"
+            );
+
+            return "login";
+        }
+
+        // LOGIN SUCCESS
+        session.setAttribute("loggedUser", dbUser);
+
+        redirectAttributes.addFlashAttribute(
+                "loginSuccess",
+                "Login successful!"
         );
 
-        return "login";
+        // ================= REDIRECT LOGIC =================
+        String redirectUrl = (String) session.getAttribute("redirectAfterLogin");
+
+        if (redirectUrl != null) {
+
+            session.removeAttribute("redirectAfterLogin");
+
+            return "redirect:" + redirectUrl;
+        }
+
+        // NORMAL LOGIN → DASHBOARD
+        return "redirect:/dashboard";
     }
-
-    // LOGIN SUCCESS
-    session.setAttribute("loggedUser", dbUser);
-
-    redirectAttributes.addFlashAttribute(
-            "loginSuccess",
-            "Login successful!"
-    );
-
-    return "redirect:/";
 }
+    
