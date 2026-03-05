@@ -15,14 +15,14 @@ public class FlightServiceImpl implements FlightService {
     private FlightDAO flightDAO;
 
     @Override
-    public List<Flight> findFlights(String source, String destination) {
+    public List<Flight> search(String source, String destination) {
 
         return flightDAO.findFlights(source, destination);
     }
 
     @Override
-    public Flight getFlightById(int id) {
+    public Flight getFlightById(int flightId) {
 
-        return flightDAO.getFlightById(id);
+        return flightDAO.getFlightById(flightId);
     }
 }
