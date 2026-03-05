@@ -319,10 +319,9 @@ Arr: ${flight.arrivalTime}
 
 <td>
 
-<a href="book/${flight.flightId}" class="btn btn-primary btn-sm">
-
-Book
-
+<a href="${pageContext.request.contextPath}/book/${flight.flightId}"
+   class="btn btn-primary btn-sm">
+   Book
 </a>
 
 </td>
