@@ -167,7 +167,7 @@ public class HomeController {
         }
 
         List<Flight> flights =
-                flightService.findFlights(
+                flightService.search(
                         searchFlight.getSource(),
                         searchFlight.getDestination()
                 );
